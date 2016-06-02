@@ -11,13 +11,15 @@
   <script>
 
     var myMarker;
+    var eastbridgeMarker;
 
     function initMap() {
         // var theirLatLng = {lat: -25.363, lng: 131.044};
         var myLatLng = {lat: 43.464258, lng: -80.5204};
+        var eastBridgeLatLng = {lat: 43.506254, lng: -80.500955};
 
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
+          zoom: 13,
           center: myLatLng
         });
 
@@ -27,8 +29,57 @@
           map: map,
           title: 'This is my city and everybody knows it!'
         }); 
-        myMarker.addListener('click', toggleBounce);
+        eastbridgeMarker = new google.maps.Marker({
+          position: eastBridgeLatLng,
+          map: map,
+          title: 'This is my where I spent my childhood!'
+        }); 
+        eastbridgeMarker.addListener('click', toggleBounce);
+        attachSecretMessage(eastbridgeMarker, "Eastbridge... home...");
       }
+
+      var infoWindow = new google.maps.InfoWindow({map: map});
+
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          infoWindow.setPosition(pos);
+          infoWindow.setContent('Location found.');
+          map.setCenter(pos);
+        }, function() {
+          handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } 
+      else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+    }
+
+      // Attaches an info window to a marker with the provided message. When the
+      // marker is clicked, the info window will open with the secret message.
+      function attachSecretMessage(marker, secretMessage) {
+        var infowindow = new google.maps.InfoWindow({
+          content: secretMessage
+        });
+
+        marker.addListener('click', function() {
+          infowindow.open(marker.get('map'), marker);
+        });
+      }
+
 
       function toggleBounce() {
         if (myMarker.getAnimation() !== null) {
