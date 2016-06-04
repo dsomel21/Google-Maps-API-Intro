@@ -5,10 +5,12 @@
   <meta charset="utf-8">
   <title>Dilraj Singh</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 </head>
 <body>
   <div id="map"></div>
   <script>
+    "use strict";
     var myMarker;
     var eastbridgeMarker;
 
@@ -55,9 +57,23 @@
       });
     }
 
+    $(document).ready(function(){
+      function getPhoto(){
+        $.ajax({
+          // url: 'photos/search',
+          type: 'GET',
+          url: 'https://api.500px.com/v1/photos/search/?geo=43,80,10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G'
+        }).done(function(photo){
+          // debugger;
+          console.log(photo);
+        });
+      }
+      getPhoto();
+    });
+
   </script>
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
 </script>
 </body>
 </html>
