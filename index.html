@@ -8,7 +8,7 @@
   <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="map"></div>
+  <div id="map" style="position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
   <script>
     "use strict";
     var myMarker;
@@ -23,15 +23,15 @@
       });
 
       var waterlooString = 
-                '<div id="content">'+
-                '<div id="siteNotice">'+
-                '</div>'+
-                '<h1 id="firstHeading" class="firstHeading">Waterloo</h1>'+
-                '<div id="bodyContent">'+
-                '<p><b>Waterloo</b>, also referred to as <b>The 9!</b></p>'+
-                '<p>Attribution: Waterloo, <a href="https://en.wikipedia.org/wiki/Waterloo,_Ontario">'+
-                '</div>'+
-                '</div>';
+      '<div id="full_content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Waterloo</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Waterloo</b>, also referred to as <b>The 9!</b></p>'+
+      '<p>Attribution: Waterloo, <a href="https://en.wikipedia.org/wiki/Waterloo,_Ontario">'+
+      '</div>'+
+      '</div>';
 
       var waterlooWindow = new google.maps.InfoWindow({
         content: waterlooString
