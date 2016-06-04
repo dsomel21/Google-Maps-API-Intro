@@ -22,12 +22,31 @@
         center: myLatLng
       });
 
+      var waterlooString = 
+                '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h1 id="firstHeading" class="firstHeading">Waterloo</h1>'+
+                '<div id="bodyContent">'+
+                '<p><b>Waterloo</b>, also referred to as <b>The 9!</b></p>'+
+                '<p>Attribution: Waterloo, <a href="https://en.wikipedia.org/wiki/Waterloo,_Ontario">'+
+                '</div>'+
+                '</div>';
+
+      var waterlooWindow = new google.maps.InfoWindow({
+        content: waterlooString
+      });
+
       myMarker = new google.maps.Marker({
         position: myLatLng,
         draggable: true,
         map: map,
         title: 'This is my city and everybody knows it!'
       }); 
+      myMarker.addListener('click', function() {
+        waterlooWindow.open(map, myMarker);
+      });
+
       eastbridgeMarker = new google.maps.Marker({
         position: eastBridgeLatLng,
         map: map,
@@ -72,8 +91,8 @@
     });
 
   </script>
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
 </script>
 </body>
 </html>
