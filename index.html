@@ -14,6 +14,7 @@
     "use strict";
     var myMarker;
     var eastbridgeMarker;
+    var markerPhoto = null;
 
     function getLatLng(){
       return {lat: 43.506254, lng: -80.500955};
@@ -31,8 +32,8 @@
       var waterlooString = 
       '<div id="full_content">'+
       '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Waterloo</,'+
+      '</div>'+ 
+      '<h1 id="firstHeading" class="firstHeading">Waterloo</h1>,'+
       '<p><b>Waterloo</b>, also referred to as <b>The 9!</b></p>'+
       '<p>Attribution: Waterloo, <a href="https://en.wikipedia.org/wiki/Waterloo,_Ontario">'+
       '</div>'+
@@ -58,7 +59,7 @@
         title: 'This is my where I spent my childhood!'
       }); 
       eastbridgeMarker.addListener('click', toggleBounce);
-      attachSecretMessage(eastbridgeMarker, "Eastbridge! Home...");
+      popMessage(eastbridgeMarker);
     }
 
     function toggleBounce() {
@@ -69,12 +70,14 @@
       }
     }
 
-    // Attaches an info window to a marker with the provided message. When the
-    // marker is clicked, the info window will open with the secret message.
-    function attachSecretMessage(marker, secretMessage) {
+    function getFirstPhoto(photo) {
+     return markerPhoto = photo.photos[1].image_url;
+   }
+
+   function popMessage(marker){
+      // debugger;
       var miniInfoWindow = new google.maps.InfoWindow({
-        // content: secretMessage
-        content: "<div><img width='355' height='220' src='http://i.kinja-img.com/gawker-media/image/upload/sqjwvfecd5fiy6oscj8t.jpg' alt='' /></div>"
+        content: "<div><img width='355' height='220' src=markerPhoto alt=''/></div>"
       });
 
       marker.addListener('click', function() {
@@ -84,12 +87,11 @@
 
     $(document).ready(function(){
       var coordinates = getLatLng();
-      debugger;
       $.ajax({
         type: 'GET',
-        url: `https://api.500px.com/v1/photos/search/?geo=${},${},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
-      }).done(function(photo){
-        console.log(photo);
+        url: `https://api.500px.com/v1/photos/search/?geo=${coordinates.lat},${coordinates.lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
+      }).done(function(photos){
+        getFirstPhoto(photos);
       });
     });
 
@@ -97,5 +99,7 @@
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
 </script>
+<script 
+src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </body>
 </html>
