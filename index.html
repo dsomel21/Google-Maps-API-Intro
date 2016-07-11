@@ -8,10 +8,11 @@
   <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 </head>
+
 <body>
   <div id="map" style="position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
   
-<!--   <script>
+  <script>
     "use strict";
     var myMarker;
     var eastbridgeMarker;
@@ -51,10 +52,10 @@
         map: map,
         title: 'This is my city and everybody knows it!'
       }); 
-      // myMarker.addListener('click', function() {
-      //   waterlooWindow.open(map, myMarker);
-      //   popMessage(eastbridgeMarker);
-      // });
+      myMarker.addListener('click', function() {
+        waterlooWindow.open(map, myMarker);
+        popMessage(eastbridgeMarker);
+      });
 
       eastbridgeMarker = new google.maps.Marker({
         position: eastBridgeLatLng,
@@ -73,73 +74,33 @@
       }
     }
 
-    function getFirstPhoto(photo) {
-     markerPhoto = photo.photos[1].image_url;
-     myMarker.addListener('click', function() {
-       waterlooWindow.open(map, myMarker);
-       popMessage(eastbridgeMarker, markerPhoto);
-     });
+    // function getFirstPhoto(photo) {
+    //   markerPhoto = photo.photos[1].image_url;
+    //   // myMarker.addListener('click', function() {
+    //   //  waterlooWindow.open(map, myMarker);
+    //  popMessage(eastbridgeMarker, markerPhoto);
+    //  // });
+    // }
 
-   }
+    // function popMessage(marker, markerPhoto) {
+    //   var miniInfoWindow = new google.maps.InfoWindow({
+    //     content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
+    //   });
+    //   marker.addListener('click', function() {
+    //     miniInfoWindow.open(marker.get('map'), marker);
+    //   });
+    // }
 
-   function popMessage(marker, markerPhoto){
-
-    console.log(markerPhoto);
-    var miniInfoWindow = new google.maps.InfoWindow({
-      content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
-    });
-    marker.addListener('click', function() {
-      miniInfoWindow.open(marker.get('map'), marker);
-    });
-  }
-
-  $(document).ready(function(){
-    var coordinates = getLatLng();
-    $.ajax({
-      type: 'GET',
-      url: `https://api.500px.com/v1/photos/search/?geo=${coordinates.lat},${coordinates.lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
-    }).done(function(photos){
-      getFirstPhoto(photos);
-    });
-  });
-</script> -->
-
-<script>
-  'use strict';
-  d3.csv('carelink.csv', function(data){
-    var canvas = d3.select('body').append('svg')
-    .attr('width',500)
-    .attr('heigth',500)
-
-    canvas.selectAll('rect')
-    .data(data)
-    .enter()
-    .append('rect')
-    .attr('width', function(d){
-      return d['Bolus Volume Delivered (U)'];
-    })
-      // .attr('heigth',50)
-      // .attr('y', function(d, i){
-      //  return i * 50;
-      // })
-      .attr('fill', 'blue')
-    })
-</script>
-
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
-</script>
-<script 
-src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-</body>
-</html>
-
-<!-- <html>
-<head>
-  <title>Diabetes Graph</title>
-  <h2>HERE</h2>
-</head>
-<body>
+    // $(document).ready(function(){
+    //   var coordinates = getLatLng();
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: `https://api.500px.com/v1/photos/search/?geo=${coordinates.lat},${coordinates.lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
+    //   }).done(function(photos){
+    //     getFirstPhoto(photos);
+    //   });
+    // });
+  </script>
 
   </body>
-  </html> -->
+</html>
