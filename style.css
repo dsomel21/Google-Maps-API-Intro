@@ -4,9 +4,34 @@ html, body {
 	padding: 0;
 }
 
+#box {
+	height: 50%;
+	background: rgb(85,26,139);
+}
+
+h1 {
+	margin: 0;
+	font-family: 'Bungee Inline', cursive;
+	font-size: 5em;
+  color: white;
+  text-align: center;
+  z-index: 2;
+  /*margin-top: 50px;*/
+}
+
+#box img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0.6;
+}
+
 #map {
 	height: 100%;
 }
+
 
 #full_content{
 	background:#3498db;
