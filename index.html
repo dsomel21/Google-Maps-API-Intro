@@ -6,11 +6,12 @@
   <title>Dilraj Singh</title>
   <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 </head>
 <body>
   <div id="map" style="position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
   
-  <script>
+<!--   <script>
     "use strict";
     var myMarker;
     var eastbridgeMarker;
@@ -82,7 +83,6 @@
    }
 
    function popMessage(marker, markerPhoto){
-    debugger;
 
     console.log(markerPhoto);
     var miniInfoWindow = new google.maps.InfoWindow({
@@ -102,12 +102,44 @@
       getFirstPhoto(photos);
     });
   });
+</script> -->
 
+<script>
+  'use strict';
+  d3.csv('carelink.csv', function(data){
+    var canvas = d3.select('body').append('svg')
+    .attr('width',500)
+    .attr('heigth',500)
+
+    canvas.selectAll('rect')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr('width', function(d){
+      return d['Bolus Volume Delivered (U)'];
+    })
+      // .attr('heigth',50)
+      // .attr('y', function(d, i){
+      //  return i * 50;
+      // })
+      .attr('fill', 'blue')
+    })
 </script>
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
+
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
 </script>
 <script 
 src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </body>
 </html>
+
+<!-- <html>
+<head>
+  <title>Diabetes Graph</title>
+  <h2>HERE</h2>
+</head>
+<body>
+
+  </body>
+  </html> -->
