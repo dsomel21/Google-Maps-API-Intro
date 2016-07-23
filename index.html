@@ -8,14 +8,21 @@
   <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <link href='https://fonts.googleapis.com/css?family=Bungee+Inline' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-  
+
   <div id="box">
     <h1>Mappix</h1>
     <img src="http://cdn.wonderfulengineering.com/wp-content/uploads/2015/05/Canada-Wallpaper-10.jpg" alt="">
+    <form class="search" action="">
+      <input type="search" placeholder="43.506254, -80.500955" id="search_location">
+      <button type="search">Search</button>
+    </form>  
   </div>
+  
+
   <div id="map" style="position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
   
   <script>
@@ -25,8 +32,8 @@
     var markerPhoto = null;
     var waterlooWindow;
 
-    function getLatLng(){
-      return {lat: 43.506254, lng: -80.500955};
+    function getLatLng(the_lat, the_lng){
+      return {lat: the_lat || 43.506254, lng: the_lng || -80.500955};
     }
 
     function initMap() {
@@ -91,19 +98,23 @@
     function popMessage(marker, markerPhoto) {
       var miniInfoWindow = new google.maps.InfoWindow({
         content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
-      });
+      m});
       marker.addListener('click', function() {
         miniInfoWindow.open(marker.get('map'), marker);
       });
     }
 
     $(document).ready(function(){
-      var coordinates = getLatLng();
+      $('div form').on('submit', function(e){
+        e.preventDefault();
+        var input = $("#search_location").val();
+        var geo_coordinate = [parseFloat(input.split(',')[0]), parseFloat(input.split(',')[1])];
+      });
+
       $.ajax({
         type: 'GET',
         url: `https://api.500px.com/v1/photos/search/?geo=${coordinates.lat},${coordinates.lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
       }).done(function(photos){
-        debugger;
         getFirstPhoto(photos);
       });
     });
