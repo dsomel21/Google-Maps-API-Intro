@@ -9,6 +9,9 @@
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <link href='https://fonts.googleapis.com/css?family=Bungee+Inline' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> -->
+
+
 </head>
 
 <body>
@@ -16,19 +19,20 @@
   <div id="box">
     <h1>Mappix</h1>
     <img src="http://cdn.wonderfulengineering.com/wp-content/uploads/2015/05/Canada-Wallpaper-10.jpg" alt="">
-    <form class="search" action="">
-      <input type="search" placeholder="43.506254, -80.500955" id="search_location">
-      <button type="search">Search</button>
+    <form class="search">
+      <input type="text" placeholder="Toronto, ON" id="search_location" size="50">
+      <button type="button">Search</button>
     </form>  
   </div>
-  
 
   <div id="map" style="position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
   
   <script>
+
     "use strict";
+
     var myMarker;
-    var eastbridgeMarker;
+    var selectedMarker;
     var markerPhoto = null;
     var waterlooWindow;
 
@@ -37,6 +41,10 @@
     }
 
     function initMap() {
+      /* Autocompletion */
+      var input = document.getElementById('search_location');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      /* Defult Locations */
       var myLatLng = {lat: 43.464258, lng: -80.5204};
       var eastBridgeLatLng = getLatLng();
 
@@ -45,7 +53,7 @@
         center: myLatLng
       });
 
-      var waterlooString = 
+      var waterlooString =
       '<div id="full_content">'+
       '<div id="siteNotice">'+
       '</div>'+ 
@@ -61,23 +69,24 @@
 
       myMarker = new google.maps.Marker({
         position: myLatLng,
-        draggable: true,
         map: map,
         title: 'This is my city and everybody knows it!'
       }); 
+
       myMarker.addListener('click', function() {
         waterlooWindow.open(map, myMarker);
-        popMessage(eastbridgeMarker);
+        popMessage(selectedMarker);
       });
 
-      eastbridgeMarker = new google.maps.Marker({
+      selectedMarker = new google.maps.Marker({
         position: eastBridgeLatLng,
         map: map,
         title: 'This is my where I spent my childhood!'
       }); 
-      eastbridgeMarker.addListener('click', toggleBounce);
-      // console.log(markerPhoto);
+
     }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
 
     function toggleBounce() {
       if (myMarker.getAnimation() !== null) {
@@ -91,14 +100,14 @@
       markerPhoto = photo.photos[1].image_url;
       // myMarker.addListener('click', function() {
       //  waterlooWindow.open(map, myMarker);
-     popMessage(eastbridgeMarker, markerPhoto);
+     popMessage(selectedMarker, markerPhoto);
      // });
     }
 
     function popMessage(marker, markerPhoto) {
       var miniInfoWindow = new google.maps.InfoWindow({
         content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
-      m});
+      });
       marker.addListener('click', function() {
         miniInfoWindow.open(marker.get('map'), marker);
       });
@@ -120,9 +129,8 @@
     });
 
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&callback=initMap">
-  </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&libraries=places&callback=initMap"
+    async defer></script>
 
   </body>
 </html>
