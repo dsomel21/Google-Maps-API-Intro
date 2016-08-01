@@ -10,10 +10,7 @@
   <link href='https://fonts.googleapis.com/css?family=Bungee+Inline' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
   <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> -->
-
-
 </head>
-
 <body>
 
   <div id="box">
@@ -31,10 +28,11 @@
 
     "use strict";
 
-    var myMarker;
-    var selectedMarker;
+    var map;
+    var newMarker;
     var markerPhoto = null;
     var waterlooWindow;
+    var infoWindow;
 
     function getLatLng(the_lat, the_lng){
       return {lat: the_lat || 43.506254, lng: the_lng || -80.500955};
@@ -48,7 +46,7 @@
       var myLatLng = {lat: 43.464258, lng: -80.5204};
       var eastBridgeLatLng = getLatLng();
 
-      var map = new google.maps.Map(document.getElementById('map'), {
+      map = new google.maps.Map(document.getElementById('map'), {
         zoom: 12,
         center: myLatLng
       });
@@ -63,37 +61,33 @@
       '</div>'+
       '</div>';
 
-      waterlooWindow = new google.maps.InfoWindow({
-        content: waterlooString
+      map.addListener('click', function(event) {
+        placeMarker(event.latLng);
       });
 
-      myMarker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: 'This is my city and everybody knows it!'
-      }); 
-
-      myMarker.addListener('click', function() {
-        waterlooWindow.open(map, myMarker);
-        popMessage(selectedMarker);
+      infoWindow = new google.maps.InfoWindow({
+        content: waterlooString,
+        maxWidth: 350
       });
 
-      selectedMarker = new google.maps.Marker({
-        position: eastBridgeLatLng,
-        map: map,
-        title: 'This is my where I spent my childhood!'
-      }); 
+      // selectedMarker = new google.maps.Marker({
+      //   position: eastBridgeLatLng,
+      //   map: map,
+      //   title: 'This is my where I spent my childhood!'
+      // }); 
 
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    var coordinates = {lat, lng}
+    function placeMarker(location) {
+      debugger;
+      console.log(location.lat)
+      newMarker = new google.maps.Marker({
+        position: location, 
+        map: map
+      });
 
-    function toggleBounce() {
-      if (myMarker.getAnimation() !== null) {
-        myMarker.setAnimation(null);
-      } else {
-        myMarker.setAnimation(google.maps.Animation.BOUNCE);
-      }
+      infoWindow.open(map,newMarker);
     }
 
     function getFirstPhoto(photo) {
@@ -104,21 +98,21 @@
      // });
     }
 
-    function popMessage(marker, markerPhoto) {
-      var miniInfoWindow = new google.maps.InfoWindow({
-        content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
-      });
-      marker.addListener('click', function() {
-        miniInfoWindow.open(marker.get('map'), marker);
-      });
-    }
+    // function popMessage(marker, markerPhoto) {
+    //   var miniInfoWindow = new google.maps.InfoWindow({
+    //     content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
+    //   });
+    //   marker.addListener('click', function() {
+    //     miniInfoWindow.open(marker.get('map'), marker);
+    //   });
+    // }
 
     $(document).ready(function(){
-      $('div form').on('submit', function(e){
-        e.preventDefault();
-        var input = $("#search_location").val();
-        var geo_coordinate = [parseFloat(input.split(',')[0]), parseFloat(input.split(',')[1])];
-      });
+      // $('div form').on('submit', function(e){
+      //   e.preventDefault();
+      //   var input = $("#search_location").val();
+      //   var geo_coordinate = [parseFloat(input.split(',')[0]), parseFloat(input.split(',')[1])];
+      // });
 
       $.ajax({
         type: 'GET',
