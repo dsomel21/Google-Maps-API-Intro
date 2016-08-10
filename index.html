@@ -40,12 +40,38 @@
     }
 
     function initMap() {
+      /* Initialize map before everything */
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: myLatLng
+      });
 
-      /* Autocompletion */
+      /* Autocomplete Form */
       var input = document.getElementById('search_location');
       var autocomplete = new google.maps.places.Autocomplete(input);
-      autocomplete.bindTo('bounds', map);
-      
+      autocomplete.bindTo('bounds',map);
+
+      /* Creating a new window/marker for searched location */
+      var searchedInfoWindow = new google.maps.InfoWindow();
+      var searchedMarker = new google.maps.Marker({
+        map: map,
+        anchorPoint: new google.maps.Point(0, -30)
+      });
+
+      google.maps.event.addListener(autocomplete, 'place_changed',function(){
+        var place=autocomplete.getPlace();
+        if (!place.geometry){
+          return;
+        }
+        if (place.geometry.viewport) {
+          debugger;
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);
+        }
+      });
+
       /* Defult Locations */
       var myLatLng = {lat: 43.464258, lng: -80.5204};
       var eastBridgeLatLng = getLatLng();
@@ -69,10 +95,10 @@
         placeMarker(event.latLng);
       });
 
-      infoWindow = new google.maps.InfoWindow({
-        content: waterlooString,
-        maxWidth: 350
-      });
+      // infoWindow = new google.maps.InfoWindow({
+      //   content: waterlooString,
+      //   maxWidth: 350
+      // });
 
       // selectedMarker = new google.maps.Marker({
       //   position: eastBridgeLatLng,
@@ -80,11 +106,11 @@
       //   title: 'This is my where I spent my childhood!'
       // }); 
 
+      debugger;
     }
 
     var coordinates = {lat, lng};
     function placeMarker(location) {
-      debugger;
       console.log(location.lat)
       newMarker = new google.maps.Marker({
         position: location, 
@@ -98,9 +124,9 @@
       markerPhoto = photo.photos[1].image_url;
       // myMarker.addListener('click', function() {
       //  waterlooWindow.open(map, myMarker);
-     popMessage(selectedMarker, markerPhoto);
+      popMessage(selectedMarker, markerPhoto);
      // });
-    }
+   }
 
     // function popMessage(marker, markerPhoto) {
     //   var miniInfoWindow = new google.maps.InfoWindow({
@@ -118,6 +144,10 @@
       //   var geo_coordinate = [parseFloat(input.split(',')[0]), parseFloat(input.split(',')[1])];
       // });
 
+      $('form').onSubmit(function(e){
+        debugger;
+      })
+
       $.ajax({
         type: 'GET',
         url: `https://api.500px.com/v1/photos/search/?geo=${coordinates.lat},${coordinates.lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
@@ -127,9 +157,9 @@
       });
     });
 
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&libraries=places&callback=initMap"
-    async defer></script>
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&libraries=places&callback=initMap"
+  async defer></script>
 
-  </body>
+</body>
 </html>
