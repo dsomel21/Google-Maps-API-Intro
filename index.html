@@ -18,7 +18,7 @@
     <img src="http://cdn.wonderfulengineering.com/wp-content/uploads/2015/05/Canada-Wallpaper-10.jpg" alt="">
     <form class="search">
       <input type="text" placeholder="Toronto, ON" id="search_location" size="50">
-      <button type="button">Search</button>
+      <!-- <button type="button">Search</button> -->
     </form>  
   </div>
 
@@ -64,8 +64,8 @@
         var place=autocomplete.getPlace();
         input_city = place.formatted_address;
         coordinates = place.geometry.location;
+        // console.log(coordinates.lat())
         // debugger;
-        // console.log(coordinates);
 
         if (!place.geometry){
           return;
@@ -99,6 +99,7 @@
       });
 
       map.addListener('click', function(event) {
+        coordinates = event.latLng;
         placeMarker(event.latLng);
       });
 
@@ -121,50 +122,41 @@
 
     function getFirstPhoto(photo) {
       for (var i = 0; i < 3; i++){
-      markerPhoto = photo.photos[i].image_url;
-      var elem = document.createElement("img");
-      elem.setAttribute("src", markerPhoto);
+        markerPhoto = photo.photos[i].image_url;
+        var elem = document.createElement("img");
+        elem.setAttribute("src", markerPhoto);
 
-      document.getElementById("pic").appendChild(elem);
+        document.getElementById("pic").appendChild(elem);
+      }
     }
-      // debugger;
-      // searchedMarker.addListener('click', function() {
-      //   searchedInfoWindow.open(map, searchedMarker);
-      //   popMessage(searchedMarker, markerPhoto);
-      // });
-    }
-
-    // function popMessage(marker, markerPhoto) {
-    //   var miniInfoWindow = new google.maps.InfoWindow({
-    //     content: `<div><img width='355' height='220' src=${markerPhoto} alt=''/></div>`
-    //   });
-    //   marker.addListener('click', function() {
-    //     miniInfoWindow.open(marker.get('map'), marker);
-    //   });
-    // }
 
     $(document).ready(function() {  
-      $('.search').submit(function(e) {
+      /* Animate scroll on search */
+      $('form').submit(function(e) {
         e.preventDefault();
-        $(document).scrollTop($(document).height());
-        // $(document).animate({
-        //   scrollTop: $(document).height()
-        // }, 2000);
+
+        setTimeout(function(){ 
+
+          console.log(coordinates.lng())
+          $(document).scrollTop($(document).height());
+
+          if (typeof coordinates !== "undefined"){
+          // console.log('test');
+          var lng = coordinates.lng();
+          var lat = coordinates.lat();
+
+          $.ajax({
+            type: 'GET',
+            url: `https://api.500px.com/v1/photos/search/?geo=${lat},${lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
+          }).done(function(photos){
+            getFirstPhoto(photos);
+          });
+        }
+      }, 300);
+
       });
 
-      setTimeout(function(){ 
-        var lat = coordinates.lat();
-        var lng = coordinates.lng()
-        $.ajax({
-          type: 'GET',
-          url: `https://api.500px.com/v1/photos/search/?geo=${lat},${lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
-        }).done(function(photos){
-          // debugger;
-          getFirstPhoto(photos);
-        });
-      }, 3500);
     });
-
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&libraries=places&callback=initMap"
   async defer></script>
