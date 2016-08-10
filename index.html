@@ -71,7 +71,11 @@
         // };
 
         /* Creating a new window/marker for searched location */
-        var searchedInfoWindow = new google.maps.InfoWindow();
+        var searchedInfoWindow = new google.maps.InfoWindow({
+          content: waterlooString,
+          maxWidth: 350
+        });
+
         var searchedMarker = new google.maps.Marker({
           map: map,
           position: place.geometry.location,
