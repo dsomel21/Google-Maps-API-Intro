@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <title>Dilraj Singh</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
-  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.js" crossorigin="anonymous"></script>
+  
   <link href='https://fonts.googleapis.com/css?family=Bungee+Inline' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
   <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> -->
@@ -34,14 +34,18 @@
     var waterlooWindow;
     var infoWindow;
 
+
     function getLatLng(the_lat, the_lng){
       return {lat: the_lat || 43.506254, lng: the_lng || -80.500955};
     }
 
     function initMap() {
+
       /* Autocompletion */
       var input = document.getElementById('search_location');
       var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo('bounds', map);
+      
       /* Defult Locations */
       var myLatLng = {lat: 43.464258, lng: -80.5204};
       var eastBridgeLatLng = getLatLng();
@@ -78,7 +82,7 @@
 
     }
 
-    var coordinates = {lat, lng}
+    var coordinates = {lat, lng};
     function placeMarker(location) {
       debugger;
       console.log(location.lat)
@@ -118,6 +122,7 @@
         type: 'GET',
         url: `https://api.500px.com/v1/photos/search/?geo=${coordinates.lat},${coordinates.lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
       }).done(function(photos){
+        debugger;
         getFirstPhoto(photos);
       });
     });
