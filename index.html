@@ -28,11 +28,13 @@
 
     "use strict";
 
+    /* Initialize constants and public variables */
     var map;
     var newMarker;
     var markerPhoto = null;
     var waterlooWindow;
     var infoWindow;
+    var iconURL='http://www.clker.com/cliparts/c/I/g/P/d/h/google-maps-pin-blue-hi.png';
 
 
     function getLatLng(the_lat, the_lng){
@@ -40,6 +42,7 @@
     }
 
     function initMap() {
+
       /* Initialize map before everything */
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 12,
@@ -51,26 +54,29 @@
       var autocomplete = new google.maps.places.Autocomplete(input);
       autocomplete.bindTo('bounds',map);
 
-      /* Creating a new window/marker for searched location */
-      var searchedInfoWindow = new google.maps.InfoWindow();
-      var searchedMarker = new google.maps.Marker({
-        map: map,
-        anchorPoint: new google.maps.Point(0, -30)
-      });
-
+      /* Intense Google Maps validations (refer to v3 documentation) */
       google.maps.event.addListener(autocomplete, 'place_changed',function(){
         var place=autocomplete.getPlace();
         if (!place.geometry){
           return;
         }
         if (place.geometry.viewport) {
-          debugger;
           map.fitBounds(place.geometry.viewport);
         } else {
           map.setCenter(place.geometry.location);
           map.setZoom(17);
         }
+
+        /* Creating a new window/marker for searched location */
+        var searchedInfoWindow = new google.maps.InfoWindow();
+        var searchedMarker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location,
+          anchorPoint: new google.maps.Point(0, -30),
+          icon: iconURL
+        });
       });
+
 
       /* Defult Locations */
       var myLatLng = {lat: 43.464258, lng: -80.5204};
@@ -110,9 +116,9 @@
     }
 
     var coordinates = {lat, lng};
-    function placeMarker(location) {
-      console.log(location.lat)
-      newMarker = new google.maps.Marker({
+    function placeMarker(location, inputMarker) {
+      inputMarker = inputMarker || newMarker;
+      inputMarker = new google.maps.Marker({
         position: location, 
         map: map
       });

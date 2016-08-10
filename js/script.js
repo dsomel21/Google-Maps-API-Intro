@@ -11,9 +11,11 @@ function getLatLng(the_lat, the_lng){
 }
 
 function initMap() {
+
   /* Autocompletion */
   var input = document.getElementById('search_location');
   var autocomplete = new google.maps.places.Autocomplete(input);
+  
   /* Defult Locations */
   var myLatLng = {lat: 43.464258, lng: -80.5204};
   var eastBridgeLatLng = getLatLng();
