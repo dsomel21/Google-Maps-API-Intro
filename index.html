@@ -32,14 +32,9 @@
     var map;
     var newMarker;
     var markerPhoto = null;
-    var waterlooWindow;
-    var infoWindow;
-    var iconURL='http://www.clker.com/cliparts/c/I/g/P/d/h/google-maps-pin-blue-hi.png';
-
-
-    function getLatLng(the_lat, the_lng){
-      return {lat: the_lat || 43.506254, lng: the_lng || -80.500955};
-    }
+    var infoWindow; 
+    var iconURL = "https://www.fws.gov/urban/img/googlePinBlue.png";
+    var myLatLng = {lat: 43.464258, lng: -80.5204};
 
     function initMap() {
 
@@ -64,8 +59,16 @@
           map.fitBounds(place.geometry.viewport);
         } else {
           map.setCenter(place.geometry.location);
-          map.setZoom(17);
+          map.setZoom(21);
         }
+
+        /* Strategically adjust icon */
+        // var icon = {
+        //   url: iconURL,
+        //   size: new google.maps.Size(32, 32),
+        //   origin: new google.maps.Point(0, 0),
+        //   anchor: new google.maps.Point(0, 32)
+        // };
 
         /* Creating a new window/marker for searched location */
         var searchedInfoWindow = new google.maps.InfoWindow();
@@ -75,16 +78,6 @@
           anchorPoint: new google.maps.Point(0, -30),
           icon: iconURL
         });
-      });
-
-
-      /* Defult Locations */
-      var myLatLng = {lat: 43.464258, lng: -80.5204};
-      var eastBridgeLatLng = getLatLng();
-
-      map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: myLatLng
       });
 
       var waterlooString =
@@ -112,17 +105,13 @@
       //   title: 'This is my where I spent my childhood!'
       // }); 
 
-      debugger;
     }
 
-    var coordinates = {lat, lng};
-    function placeMarker(location, inputMarker) {
-      inputMarker = inputMarker || newMarker;
-      inputMarker = new google.maps.Marker({
+    function placeMarker(location) {
+      newMarker = new google.maps.Marker({
         position: location, 
         map: map
       });
-
       infoWindow.open(map,newMarker);
     }
 
@@ -144,11 +133,6 @@
     // }
 
     $(document).ready(function(){
-      // $('div form').on('submit', function(e){
-      //   e.preventDefault();
-      //   var input = $("#search_location").val();
-      //   var geo_coordinate = [parseFloat(input.split(',')[0]), parseFloat(input.split(',')[1])];
-      // });
 
       $('form').onSubmit(function(e){
         debugger;
