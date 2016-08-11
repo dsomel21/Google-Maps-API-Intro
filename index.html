@@ -3,163 +3,32 @@
 <head>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
-  <title>Dilraj Singh</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Mappix!</title>
+  <link rel="stylesheet" type="text/css" href="src/stylesheet/style.css">
   <script src="https://code.jquery.com/jquery-2.2.4.js" crossorigin="anonymous"></script>
-  
   <link href='https://fonts.googleapis.com/css?family=Bungee+Inline' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
-  <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script> -->
 </head>
-<body>
 
+<body>
   <div id="box">
     <h1>Mappix</h1>
     <img src="http://cdn.wonderfulengineering.com/wp-content/uploads/2015/05/Canada-Wallpaper-10.jpg" alt="">
     <form class="search">
-      <input type="text" placeholder="Toronto, ON" id="search_location" size="50">
-      <!-- <button type="button">Search</button> -->
+      <input type="text" placeholder="CN Tower, Toronto, ON, Canada" id="search_location" size="50">
     </form>  
   </div>
 
-  <div id="map" style="width: 66%; float: left; position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
-
-  <div id="pic" class="sidetab" style="overflow: hidden; height: 100%; width:34%; float: right; background-color: black; transform: translateZ(0px); opacity: 0.8;">
-  </div>
+  <div id="map" style="width: 50%; float: left; position: relative; overflow: hidden; transform: translateZ(0px); background-color: (#EEEEEE);"></div>
   
-  <script>
+  <div class="pic_container">
+    <div id="pic">
+    </div>
+  </div>
 
-    "use strict";
-
-    /* Initialize constants and public variables */
-    var map;
-    var newMarker;
-    var infoWindow; 
-    var markerPhoto = null;
-    var iconURL = "https://www.fws.gov/urban/img/googlePinBlue.png";
-    var myLatLng = {lat: 43.464258, lng: -80.5204};
-    // var geocoder;
-    var coordinates;
-    var searchedInfoWindow;
-    var searchedMarker;
-
-    function initMap() {
-
-      /* Initialize map before everything */
-      map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: myLatLng
-      });
-
-      // geocoder = new google.maps.Geocoder;
-
-      /* Autocomplete Form */
-      var input = document.getElementById('search_location');
-      var autocomplete = new google.maps.places.Autocomplete(input);
-      autocomplete.bindTo('bounds',map);
-      var input_city;
-
-      /* Intense Google Maps validations (refer to v3 documentation) */
-      google.maps.event.addListener(autocomplete, 'place_changed',function(){
-        var place=autocomplete.getPlace();
-        input_city = place.formatted_address;
-        coordinates = place.geometry.location;
-        // console.log(coordinates.lat())
-        // debugger;
-
-        if (!place.geometry){
-          return;
-        }
-        if (place.geometry.viewport) {
-          map.fitBounds(place.geometry.viewport);
-        } else {
-          map.setCenter(place.geometry.location);
-          map.setZoom(21);
-        }
-
-        /* Creating a new window/marker for searched location */
-        searchedInfoWindow = new google.maps.InfoWindow({
-          content: 
-          '<div id="full_content">'+
-          `<h1 id="firstHeading" class="firstHeading">${input_city}</h1>,`+
-          '<p><b>Waterloo</b>, also referred to as <b>The 9!</b></p>'+
-          '<p>Attribution: Waterloo, <a href="https://en.wikipedia.org/wiki/Waterloo,_Ontario">'+
-          '</div>'+
-          '</div>',
-          maxWidth: 350
-        });
-
-        searchedMarker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location,
-          anchorPoint: new google.maps.Point(0, -30),
-          icon: iconURL
-        });
-        searchedInfoWindow.open(map,searchedMarker);
-      });
-
-      map.addListener('click', function(event) {
-        coordinates = event.latLng;
-        placeMarker(event.latLng);
-      });
-
-      infoWindow = new google.maps.InfoWindow({
-        content:  
-        '<div id="full_content">'+
-        '<h1 id="firstHeading" class="firstHeading">Your Destination</h1>,'+
-        '</div>',
-        maxWidth: 350
-      });
-    }
-
-    function placeMarker(location) {
-      newMarker = new google.maps.Marker({
-        position: location, 
-        map: map
-      });
-      infoWindow.open(map,newMarker);
-    }
-
-    function getFirstPhoto(photo) {
-      for (var i = 0; i < 3; i++){
-        markerPhoto = photo.photos[i].image_url;
-        var elem = document.createElement("img");
-        elem.setAttribute("src", markerPhoto);
-
-        document.getElementById("pic").appendChild(elem);
-      }
-    }
-
-    $(document).ready(function() {  
-      /* Animate scroll on search */
-      $('form').submit(function(e) {
-        e.preventDefault();
-
-        setTimeout(function(){ 
-
-          console.log(coordinates.lng())
-          $(document).scrollTop($(document).height());
-
-          if (typeof coordinates !== "undefined"){
-          // console.log('test');
-          var lng = coordinates.lng();
-          var lat = coordinates.lat();
-
-          $.ajax({
-            type: 'GET',
-            url: `https://api.500px.com/v1/photos/search/?geo=${lat},${lng},10km&feature=popular&consumer_key=XNqpn2rRFpTbvN12g1BzE0hqtRu52tLOSJvdCE3G`
-          }).done(function(photos){
-            getFirstPhoto(photos);
-          });
-        }
-      }, 300);
-
-      });
-
-    });
-  </script>
+  <script src="src/scripts/main.js"></script> 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOWxTnbHJLi0VuTefxkuKf0gaA0AwvMfA&libraries=places&callback=initMap"
   async defer></script>
-
 </body>
+
 </html>
